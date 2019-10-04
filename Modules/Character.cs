@@ -12,14 +12,15 @@ public class Character
     string photo;
     string job;
     string description;
-
-
-
 public Character(){}
+
+
+
 public Character(string firstName)
 {
 this.firstName
 }
+
 
         public Character(global::System.String firstName, global::System.String secondName, global::System.String lastName, global::System.Int32 age, global::System.Int32 height, global::System.Int32 weight, global::System.String birthDate, global::System.String photo, global::System.String job, global::System.String description) : this(firstName)
         {
