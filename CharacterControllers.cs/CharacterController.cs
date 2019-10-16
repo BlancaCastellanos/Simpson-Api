@@ -1,8 +1,10 @@
+using System.Data.SqlClient;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using api_simpsons.Modules;
 using api_simpsons.Dependencies;
 using Microsoft.AspNetCore.Cors;
+
 
 namespace api_simpsons.Controllers
 {
@@ -57,6 +59,8 @@ namespace api_simpsons.Controllers
 
         };
 
+         string connectionString = @"data source=DESKTOP-KHJSSNA\SQLEXPRESS01; initial catalog=db_simpsons; user id=simpsons; password=1234";
+
         [HttpGet("{id}")]
         public Character GetCharacter(int id){
             return listofCharacters[id];
@@ -65,7 +69,26 @@ namespace api_simpsons.Controllers
         [HttpGet]
         public List<Character> GetCharacterList()
         {
-            return listofCharacters; 
+            List<Character> characters = new List<Character>();
+
+            SqlConnection conn = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("select * from tbl_character", conn);
+            conn.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while(reader.Read())
+            {
+                Character character = new Character
+                {
+                    Id = reader.GetInt64(reader.GetOrdinal("id")),
+                    Name = reader.GetString(reader.GetOrdinal("namee")),
+                    SecondName = reader.GetString(reader.GetOrdinal("secondname")),
+                    LastName = reader.GetString(reader.GetOrdinal("lastname")),
+                   
+                };
+                characters.Add(character);
+            }
+            conn.Close();
+            return characters;
         }
     }
 }
